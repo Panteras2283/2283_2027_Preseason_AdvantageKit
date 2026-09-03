@@ -31,8 +31,15 @@ public class TunerConstants {
           .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
   // When using closed-loop control, the drive motor uses the control
   // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
+  //
+  // NOTE: The AdvantageKit template's ModuleIOTalonFX sets
+  // Feedback.SensorToMechanismRatio = DriveMotorGearRatio, so this loop runs in
+  // WHEEL rotations/sec, not rotor rotations/sec like the stock CTRE swerve project.
+  // Last year's rotor-referenced gains (kP 0.1, kV 0.124) were scaled by the drive
+  // gear ratio (~5.6) to get an equivalent starting point here. Re-tune with the
+  // "Drive Simple FF Characterization" routine when there's time.
   private static final Slot0Configs driveGains =
-      new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
+      new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0).withKV(0.7);
 
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
