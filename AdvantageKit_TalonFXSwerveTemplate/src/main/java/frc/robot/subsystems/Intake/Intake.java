@@ -4,9 +4,8 @@
 
 package frc.robot.subsystems.Intake;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
   private final IntakeIO io;
@@ -25,11 +24,11 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setPosition(double leftRotations, double rightRotations){
+  public void setPosition(double leftRotations, double rightRotations) {
     io.setPivotPositions(leftRotations, rightRotations);
   }
 
-  public void down(){
+  public void down() {
     feeding = true;
     io.setPivotPositions(IntakeConstants.LeftFeedPos, IntakeConstants.RightFeedPos);
     io.setFeederVelocity(IntakeConstants.kFeederVelocityRotPerSec);
@@ -37,7 +36,38 @@ public class Intake extends SubsystemBase {
 
   public void feed() {
     feeding = true;
-    io.setFeederVelocity(IntakeConstants.kFeederStatorCurrentLimit);
+    io.setFeederVelocity(IntakeConstants.kFeederVelocityRotPerSec);
+  }
 
+  public void up() {
+    feeding = false;
+    io.setPivotPositions(IntakeConstants.LeftUpPos, IntakeConstants.RightUpPos);
+  }
+
+  public void outtake() {
+    feeding = false;
+    io.setFeederDutyCycle(IntakeConstants.kOuttakePercent);
+  }
+
+  public void stop() {
+    feeding = false;
+    io.setFeederDutyCycle(0);
+  }
+
+  public boolean isFeeding() {
+    return feeding;
+  }
+
+  public double getLeftPosition() {
+    return inputs.leftPivotPositionRots;
+  }
+
+  public double getRightPosition() {
+    return inputs.rightPivotPositionRots;
+  }
+
+  public boolean isAtPosition(double leftTarget, double rightTarget) {
+    return Math.abs(getLeftPosition() - leftTarget) <= IntakeConstants.kPositionToleranceRotation
+        && Math.abs(getRightPosition() - rightTarget) <= IntakeConstants.kPositionToleranceRotation;
   }
 }
