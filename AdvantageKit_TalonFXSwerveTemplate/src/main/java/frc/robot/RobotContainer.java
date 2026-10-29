@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.*;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.generated.TunerConstants;
@@ -167,11 +168,11 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
-    operator.pov(180).onTrue(Commands.runOnce(intake::down));
-    operator.pov(180).onFalse(Commands.runOnce(intake::stop));
-    operator.pov(0).onTrue(Commands.runOnce(intake::outtake));
-    operator.pov(0).onFalse(Commands.runOnce(intake::stop));
-    operator.pov(270).onTrue(Commands.runOnce(intake::up));
+    operator.pov(180).onTrue(Commands.runOnce(intake::down, intake));
+    operator.pov(180).onFalse(Commands.runOnce(intake::stop, intake));
+    operator.pov(0).onTrue(Commands.runOnce(intake::outtake, intake));
+    operator.pov(0).onFalse(Commands.runOnce(intake::stop, intake));
+    operator.pov(270).onTrue(Commands.runOnce(intake::up, intake));
 
     operator.a().whileTrue(IntakeCommands.shakeFeeder(intake).repeatedly());
     operator.a().onFalse(IntakeCommands.defaultCommand(intake));

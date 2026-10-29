@@ -28,8 +28,8 @@ public class IntakeCommands {
     return Commands.sequence(
         Commands.runOnce(
             () ->
-                intake.setPosition(
-                    IntakeConstants.LeftShakeUpPos, IntakeConstants.RightShakeUpPos)),
+                intake.setPosition(IntakeConstants.LeftShakeUpPos, IntakeConstants.RightShakeUpPos),
+            intake),
         Commands.waitUntil(
             () ->
                 intake.isAtPosition(
@@ -37,7 +37,8 @@ public class IntakeCommands {
         Commands.runOnce(
             () ->
                 intake.setPosition(
-                    IntakeConstants.LeftShakeDownPos, IntakeConstants.RightShakeDownPos)),
+                    IntakeConstants.LeftShakeDownPos, IntakeConstants.RightShakeDownPos),
+            intake),
         Commands.waitUntil(
             () ->
                 intake.isAtPosition(

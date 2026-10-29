@@ -11,8 +11,8 @@ public class IntakeConstants {
   public static final int FeederRightID = 31;
   public static final int FeederLeftID = 33;
 
-  public static final double LeftFeedPos = -0.5;
-  public static final double RightFeedPos = -0;
+  public static final double LeftFeedPos = 0.0;
+  public static final double RightFeedPos = 0.0;
   public static final double LeftUpPos = 16;
   public static final double RightUpPos = -16;
   public static final double LeftShakeUpPos = 7.5;
