@@ -16,34 +16,37 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 /** Add your docs here. */
-public class SpindexerIOReal implements SpindexerIO{
-    private final SparkFlex SpindexerMotor = new SparkFlex(SpindexerConstants.SpindexerMotorID, MotorType.kBrushless);
-    private final SparkClosedLoopController closedLoopController = SpindexerMotor.getClosedLoopController();
-    private final RelativeEncoder encoder = SpindexerMotor.getEncoder();
+public class SpindexerIOReal implements SpindexerIO {
+  private final SparkFlex SpindexerMotor =
+      new SparkFlex(SpindexerConstants.SpindexerMotorID, MotorType.kBrushless);
+  private final SparkClosedLoopController closedLoopController =
+      SpindexerMotor.getClosedLoopController();
+  private final RelativeEncoder encoder = SpindexerMotor.getEncoder();
 
-    public SpindexerIOReal() {
-        var config = new SparkFlexConfig();
-        config.closedLoop.pid(SpindexerConstants.kP, SpindexerConstants.kI, SpindexerConstants.kD);
-        config.closedLoop.feedForward.kV(SpindexerConstants.kFF);
-        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        SpindexerMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
+  public SpindexerIOReal() {
+    var config = new SparkFlexConfig();
+    config.closedLoop.pid(SpindexerConstants.kP, SpindexerConstants.kI, SpindexerConstants.kD);
+    config.closedLoop.feedForward.kV(SpindexerConstants.kFF);
+    config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    SpindexerMotor.configure(
+        config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
 
-    @Override
-    public void updateInputs(SpindexerIOInputs inputs){
-        inputs.connected = true;
-        inputs.velocityRPM = encoder.getVelocity();
-        inputs.appliedOutput = SpindexerMotor.getAppliedOutput();
-        inputs.currentAmps = SpindexerMotor.getOutputCurrent();
-    }
+  @Override
+  public void updateInputs(SpindexerIOInputs inputs) {
+    inputs.connected = true;
+    inputs.velocityRPM = encoder.getVelocity();
+    inputs.appliedOutput = SpindexerMotor.getAppliedOutput();
+    inputs.currentAmps = SpindexerMotor.getOutputCurrent();
+  }
 
-    @Override
-    public void setVelocityRPM(double rpm){
-        closedLoopController.setSetpoint(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
-    }
+  @Override
+  public void setVelocityRPM(double rpm) {
+    closedLoopController.setSetpoint(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+  }
 
-    @Override
-    public void stop(){
-        SpindexerMotor.set(0);
-    }
+  @Override
+  public void stop() {
+    SpindexerMotor.set(0);
+  }
 }

@@ -25,24 +25,24 @@ import java.util.function.Supplier;
 
 /** Add your docs here. */
 public class DriveToPoseCommands {
-    private static final double MAX_SPEED_MPS = 4.7;
-    private static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = Units.rotationsToRadians(0.55);
-    private static final double POSE_TOLERANCE_METERS = 0.05;
-    private static final double ANGLE_TOLERANCE_RAD = Units.degreesToRadians(2);
+  private static final double MAX_SPEED_MPS = 4.7;
+  private static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = Units.rotationsToRadians(0.55);
+  private static final double POSE_TOLERANCE_METERS = 0.05;
+  private static final double ANGLE_TOLERANCE_RAD = Units.degreesToRadians(2);
 
-    private DriveToPoseCommands() {}
+  private DriveToPoseCommands() {}
 
-    public static Command fastDriveToPose(
-        Drive drive, PathConstraints constraints, Supplier<Integer> side, Supplier<Integer> slot) {
+  public static Command fastDriveToPose(
+      Drive drive, PathConstraints constraints, Supplier<Integer> side, Supplier<Integer> slot) {
     return new DeferredCommand(
-                ()-> {
-                    Pose2d scoringPose = Constants.AutopilotConstants.getPose(side.get(), slot.get());
-                    return AutoBuilder.pathfindToPose(scoringPose, constraints);
+        () -> {
+          Pose2d scoringPose = Constants.AutopilotConstants.getPose(side.get(), slot.get());
+          return AutoBuilder.pathfindToPose(scoringPose, constraints);
         },
         Set.of(drive));
-    }
+  }
 
-    public static Command preciseDriveToPose(
+  public static Command preciseDriveToPose(
       Drive drive,
       PathConstraints constraints,
       Supplier<Integer> side,
@@ -123,5 +123,5 @@ public class DriveToPoseCommands {
               driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
               operator.getHID().setRumble(RumbleType.kBothRumble, 0.0);
             });
-        }
+  }
 }

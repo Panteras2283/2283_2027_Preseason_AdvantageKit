@@ -8,14 +8,20 @@ import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
 public interface ShooterIO {
-    @AutoLog
-    public static class ShooterIOInputs{
-        public boolean shooterConnected = false;
-        public double FlywheelLeftRPM = 0.0;
-        public double FlywheelRightRPM = 0.0;
-        public double appliedVolts = 0.0;
-        public double currentAmps = 0.0;
-    }
+  @AutoLog
+  public static class ShooterIOInputs {
+    public boolean shooterConnected = false;
+    public double FlywheelLeftRPM = 0.0;
+    public double FlywheelRightRPM = 0.0;
+    public double appliedVolts = 0.0;
+    public double currentAmps = 0.0;
+  }
 
-    public default void updateInputs(ShooterIOInputs inputs) {}
+  public default void updateInputs(ShooterIOInputs inputs) {}
+
+  public default void setVelocityRPM(double rpm) {}
+
+  public default void setVoltage(double volts) {}
+
+  public default void stop() {}
 }
