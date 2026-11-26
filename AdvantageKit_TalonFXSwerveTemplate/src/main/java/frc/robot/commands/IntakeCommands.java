@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.spindexer.Spindexer;
+import frc.robot.subsystems.spindexer.SpindexerConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCommands {
@@ -42,6 +44,12 @@ public class IntakeCommands {
         Commands.waitUntil(
             () ->
                 intake.isAtPosition(
-                    IntakeConstants.LeftShakeDownPos, IntakeConstants.RightShakeDownPos)));
+                    IntakeConstants.LeftShakeDownPos, IntakeConstants.RightShakeDownPos))).repeatedly();
+  }
+
+  public static Command robotUnjam(Intake intake, Spindexer spindexer){
+    return Commands.parallel(
+        Commands.run(()-> spindexer.spin(SpindexerConstants.kUnjamRPM), spindexer),
+    shakeFeeder(intake));
   }
 }

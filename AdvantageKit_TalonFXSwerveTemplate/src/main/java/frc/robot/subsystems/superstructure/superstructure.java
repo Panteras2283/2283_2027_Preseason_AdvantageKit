@@ -96,6 +96,10 @@ public class superstructure extends SubsystemBase {
     wantsShoot = !wantsShoot;
   }
 
+  public void toggleUnjam(boolean unjam){
+    wantsUnjam = unjam;
+  }
+
   public boolean isShooting() {
     return shooting;
   }

@@ -65,6 +65,21 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier) {
+    return joystickDrive(
+        drive, xSupplier, ySupplier, omegaSupplier, drive::getMaxLinearSpeedMetersPerSec);
+  }
+
+  /**
+   * Field relative drive command using two joysticks, with the linear speed cap supplied
+   * dynamically (e.g. to slow the robot while lining up a shot or feeding a game piece) instead of
+   * always using {@link Drive#getMaxLinearSpeedMetersPerSec()}.
+   */
+  public static Command joystickDrive(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier,
+      DoubleSupplier maxLinearSpeedMetersPerSecSupplier) {
     return Commands.run(
         () -> {
           // Get linear velocity
@@ -77,11 +92,13 @@ public class DriveCommands {
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
 
+          double maxLinearSpeed = maxLinearSpeedMetersPerSecSupplier.getAsDouble();
+
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getX() * maxLinearSpeed,
+                  linearVelocity.getY() * maxLinearSpeed,
                   omega * drive.getMaxAngularSpeedRadPerSec());
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
